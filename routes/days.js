@@ -17,6 +17,7 @@ app.get('/', (req, res, next)=> {
   .catch(next);
 });
 
+
 app.post('/', (req, res, next)=> {
   Day.create({})
     .then( day => {
