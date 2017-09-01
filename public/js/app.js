@@ -22,8 +22,12 @@ $(function(){
               return item.id === obj.id;
             });
             //TODO - ajax call to add on server
-            days[idx][obj.key].push(item);
-            renderDayAndOptions();
+            console.log('looking at: ', `/${idx + 1}/${obj.key}/${obj.id}`)
+            $.post(`/days/${idx + 1}/${obj.key}/${obj.id}`)
+              .then(() => {
+                days[idx][obj.key].push(item);
+                renderDayAndOptions();
+              })
           }
         });
       }
@@ -45,13 +49,12 @@ $(function(){
         }
 
         var removeDay = function(){
-            console.log('idx= ',idx)
-          if(days.length === 1){
+          if (days.length === 1){
             return;
           }
           //TODO - remove the day on server
           $.ajax({
-            url: `/days/${idx+1}`,
+            url: `/days/${idx + 1}`,
             type: 'DELETE'
           })
           .then(() => {
@@ -60,7 +63,7 @@ $(function(){
             });
             idx = 0;
 
-            renderDayPicker();            
+            renderDayPicker();
 
           })
 
