@@ -45,15 +45,25 @@ $(function(){
         }
 
         var removeDay = function(){
+            console.log('idx= ',idx)
           if(days.length === 1){
             return;
           }
           //TODO - remove the day on server
-          days = days.filter(function(day, _idx){
-            return _idx !== idx;
-          });
-          idx = 0;
-          renderDayPicker();
+          $.ajax({
+            url: `/days/${idx+1}`,
+            type: 'DELETE'
+          })
+          .then(() => {
+            days = days.filter(function(day, _idx){
+              return _idx !== idx;
+            });
+            idx = 0;
+
+            renderDayPicker();            
+
+          })
+
         }
 
         var selectDay = function(_idx){

@@ -24,9 +24,13 @@ app.post('/', (req, res, next)=> {
       res.send(day);
     });
 });
-
+ 
 app.delete('/:id', (req, res, next)=> {
-  //TODO - implement
+  console.log("here")
+  const id = req.params.id;
+  Day.destroy({where: {id}})
+  .then(() => res.sendStatus(200))
+  .catch(next);
 });
 
 //TO DO - total of six routes, add and remove hotels, restaurants, activities for a day
