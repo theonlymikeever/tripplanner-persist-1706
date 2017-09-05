@@ -22,8 +22,11 @@ $(function(){
               return item.id === obj.id;
             });
             //TODO - ajax call to add on server
-            console.log('looking at: ', `/${idx + 1}/${obj.key}/${obj.id}`)
-            $.post(`/days/${idx + 1}/${obj.key}/${obj.id}`)
+            let dayId = $('#dayPicker').find('li.active').data('dayid');
+            //dayId === day ID
+            //obj.key === 'hotel, restaurants, etc'
+            //obj.id === item ID
+            $.post(`/days/${dayId}/${obj.key}/${obj.id}`)
               .then(() => {
                 days[idx][obj.key].push(item);
                 renderDayAndOptions();
@@ -52,6 +55,7 @@ $(function(){
           if (days.length === 1){
             return;
           }
+          console.log(this)
           //TODO - remove the day on server
           $.ajax({
             url: `/days/${idx + 1}`,
@@ -62,9 +66,7 @@ $(function(){
               return _idx !== idx;
             });
             idx = 0;
-
             renderDayPicker();
-
           })
 
         }

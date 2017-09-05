@@ -4,7 +4,7 @@ function Day(config){
     var lis = config.day[key].map(function(item){
       return `
         <li class='list-group-item'>
-          ${item.name} 
+          ${item.name}
           <button data-id='${item.id}' data-key='${key}' class='btn btn-warning btn-sm pull-right'>x</button>
           <br clear='both' />
         </li>
