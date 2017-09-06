@@ -33,6 +33,31 @@ Restaurant.belongsTo(Place);
 Activity.belongsTo(Place);
 
 
+//Days Class functions
+Day.removeItem = function(dayId, itemId, itemKey) {
+  return Day.findOne({
+    where: {
+      id: dayId
+    },
+    include: [{
+      model: itemKey,
+      where: {
+        id: itemId
+      }
+    }]
+  })
+  .then((day) => {
+    //this variable is created based on the assosciation list that comes back
+    let dayAssociationList = Object.keys(day)[Object.keys(day).length-1]
+    // this variable creates the association specific remove such as
+    //.removeHotel or .removeActivity
+    let removeAssociation = `remove${dayAssociationList.charAt(0).toUpperCase()}${dayAssociationList.slice(1)}`
+    return day[removeAssociation](day[dayAssociationList][0])
+  })
+}
+
+
+//sync and seed
 const sync = ()=> {
   return conn.sync({ force: true });
 };

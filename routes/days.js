@@ -52,7 +52,26 @@ app.post('/:dayId/restaurants/:id', (req, res, next)=> {
 });
 
 app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
+    let dayId = req.params.dayId;
+    let restaurantsId = req.params.id;
 
+  Day.removeItem(dayId, restaurantsId, Restaurant)
+  .then(() => {
+    res.sendStatus(201);
+  })
+  .catch(next)
+
+    // Promise.all([
+    //   Day.findById(dayId),
+    //   Restaurant.findById(restaurantsId)
+    // ])
+    // .then(([day, restaurant]) => {
+    //   return day.removeRestaurant(restaurant)
+    // })
+    // .then(() => {
+    //   res.sendStatus(201)
+    // })
+    // .catch(next);
 });
 
 // Adding and Deleting Hotel
@@ -73,6 +92,26 @@ app.post('/:dayId/hotels/:id', (req, res, next)=> {
 });
 
 app.delete('/:dayId/hotels/:id', (req, res, next)=> {
+  let dayId = req.params.dayId;
+  let hotelId = req.params.id;
+
+  Day.removeItem(dayId, hotelId, Hotel)
+  .then(() => {
+    res.sendStatus(201);
+  })
+  .catch(next)
+
+  // Promise.all([
+  //   Day.findById(dayId),
+  //   Hotel.findById(hotelId)
+  // ])
+  // .then(([day, hotel]) => {
+  //   return day.removeHotel(hotel)
+  // })
+  // .then(() => {
+  //   res.sendStatus(201)
+  // })
+  // .catch(next);
 
 });
 
@@ -93,7 +132,35 @@ app.post('/:dayId/activities/:id', (req, res, next)=> {
     .catch(next)
 });
 
-app.delete('/:dayId/hotels/:id', (req, res, next)=> {
+app.delete('/:dayId/activities/:id', (req, res, next)=> {
+    let dayId = req.params.dayId;
+    let activitiesId = req.params.id;
 
+
+  Day.removeItem(dayId, activitiesId, Activity)
+  .then(() => {
+    res.sendStatus(201);
+  })
+  .catch(next)
+  // Day.findOne({
+  //   where: {
+  //     id: dayId
+  //   },
+  //   include: [{
+  //     model: Activity,
+  //     where: {
+  //       id: activitiesId
+  //     }
+  //   }]
+  // })
+  // .then((day) => {
+  //   //include should only return the one activity in an array
+  //   return day.removeActivity(day.activities[0])
+  // })
+  // .then(() => {
+  //   res.sendStatus(201)
+  // })
+  // .catch(next);
 });
+
 module.exports = app;

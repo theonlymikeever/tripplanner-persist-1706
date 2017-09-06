@@ -55,10 +55,10 @@ $(function(){
           if (days.length === 1){
             return;
           }
-          console.log(this)
+          let dayId = $('#dayPicker').find('li.active').data('dayid');
           //TODO - remove the day on server
           $.ajax({
-            url: `/days/${idx + 1}`,
+            url: `/days/${dayId}`,
             type: 'DELETE'
           })
           .then(() => {
@@ -96,11 +96,20 @@ $(function(){
       //this function render day
       function renderDay(){
         var onRemoveItem = function(obj){
-          days[idx][obj.key] = days[idx][obj.key].filter(function(item){
-            return item.id !== obj.id;
-          });
           //TODO - update on server
-          renderDayAndOptions();
+          let dayId = $('#dayPicker').find('li.active').data('dayid')
+          console.log('deleting: ', (`days/${dayId}/${obj.key}/${obj.id}`))
+          $.ajax({
+            url:`/days/${dayId}/${obj.key}/${obj.id}`,
+            type: 'DELETE'
+          })
+          .then(() => {
+            days[idx][obj.key] = days[idx][obj.key].filter(function(item){
+              return item.id !== obj.id;
+            });
+            renderDayAndOptions();
+          })
+
         }
         Day({
           id: '#day',
