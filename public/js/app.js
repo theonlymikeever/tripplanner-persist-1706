@@ -68,7 +68,6 @@ $(function(){
             idx = 0;
             renderDayPicker();
           })
-
         }
 
         var selectDay = function(_idx){
@@ -98,7 +97,6 @@ $(function(){
         var onRemoveItem = function(obj){
           //TODO - update on server
           let dayId = $('#dayPicker').find('li.active').data('dayid')
-          console.log('deleting: ', (`days/${dayId}/${obj.key}/${obj.id}`))
           $.ajax({
             url:`/days/${dayId}/${obj.key}/${obj.id}`,
             type: 'DELETE'

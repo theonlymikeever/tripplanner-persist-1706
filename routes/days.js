@@ -32,135 +32,32 @@ app.delete('/:id', (req, res, next)=> {
   .catch(next);
 });
 
-//TO DO - total of six routes, add and remove hotels, restaurants, activities for a day
+// adding item
+app.post('/:dayId/:key/:id', (req, res, next) => {
+  const dayId = req.params.dayId;
+  const itemId = req.params.id;
+  const key = req.params.key;
 
-//Adding & Deleting Restaurants
-app.post('/:dayId/restaurants/:id', (req, res, next)=> {
-  let dayId = req.params.dayId;
-  let restaurantId = req.params.id;
-  let restaurant = Restaurant.findOne({where: { id: restaurantId }})
-  let day = Day.findOne({where: { id: dayId }})
-
-  Promise.all([ day, restaurant ])
-    .then(([ _day, _restaurant ]) => {
-      return _day.addRestaurant(_restaurant)
-    })
-    .then(() => {
-      res.sendStatus(201)
-    })
-    .catch(next)
-});
-
-app.delete('/:dayId/restaurants/:id', (req, res, next)=> {
-    let dayId = req.params.dayId;
-    let restaurantsId = req.params.id;
-
-  Day.removeItem(dayId, restaurantsId, Restaurant)
+  Day.addItem(dayId, itemId, key)
   .then(() => {
     res.sendStatus(201);
   })
-  .catch(next)
-
-    // Promise.all([
-    //   Day.findById(dayId),
-    //   Restaurant.findById(restaurantsId)
-    // ])
-    // .then(([day, restaurant]) => {
-    //   return day.removeRestaurant(restaurant)
-    // })
-    // .then(() => {
-    //   res.sendStatus(201)
-    // })
-    // .catch(next);
+  .catch(next);
 });
 
-// Adding and Deleting Hotel
-app.post('/:dayId/hotels/:id', (req, res, next)=> {
-  let dayId = req.params.dayId;
-  let hotelId = req.params.id;
-  let hotel = Hotel.findOne({where: { id: hotelId }})
-  let day = Day.findOne({where: { id: dayId }})
+module.exports = app;
 
-  Promise.all([ day, hotel ])
-    .then(([ _day, _hotel ]) => {
-      return _day.addHotel(_hotel)
-    })
-    .then(() => {
-      res.sendStatus(201)
-    })
-    .catch(next)
-});
+// Deleting item
+app.delete('/:dayId/:key/:id', (req, res, next) => {
+  const dayId = req.params.dayId;
+  const itemId = req.params.id;
+  const key = req.params.key;
 
-app.delete('/:dayId/hotels/:id', (req, res, next)=> {
-  let dayId = req.params.dayId;
-  let hotelId = req.params.id;
-
-  Day.removeItem(dayId, hotelId, Hotel)
+  Day.removeItem(dayId, itemId, key)
   .then(() => {
     res.sendStatus(201);
   })
-  .catch(next)
-
-  // Promise.all([
-  //   Day.findById(dayId),
-  //   Hotel.findById(hotelId)
-  // ])
-  // .then(([day, hotel]) => {
-  //   return day.removeHotel(hotel)
-  // })
-  // .then(() => {
-  //   res.sendStatus(201)
-  // })
-  // .catch(next);
-
-});
-
-// Adding and Deleting Activity
-app.post('/:dayId/activities/:id', (req, res, next)=> {
-  let dayId = req.params.dayId;
-  let activityId = req.params.id;
-  let activity = Activity.findOne({where: { id: activityId }})
-  let day = Day.findOne({where: { id: dayId }})
-
-  Promise.all([ day, activity ])
-    .then(([ _day, _activity ]) => {
-      return _day.addActivity(_activity)
-    })
-    .then(() => {
-      res.sendStatus(201)
-    })
-    .catch(next)
-});
-
-app.delete('/:dayId/activities/:id', (req, res, next)=> {
-    let dayId = req.params.dayId;
-    let activitiesId = req.params.id;
-
-
-  Day.removeItem(dayId, activitiesId, Activity)
-  .then(() => {
-    res.sendStatus(201);
-  })
-  .catch(next)
-  // Day.findOne({
-  //   where: {
-  //     id: dayId
-  //   },
-  //   include: [{
-  //     model: Activity,
-  //     where: {
-  //       id: activitiesId
-  //     }
-  //   }]
-  // })
-  // .then((day) => {
-  //   //include should only return the one activity in an array
-  //   return day.removeActivity(day.activities[0])
-  // })
-  // .then(() => {
-  //   res.sendStatus(201)
-  // })
-  // .catch(next);
+  .catch(next);
 });
 
 module.exports = app;

@@ -34,27 +34,52 @@ Activity.belongsTo(Place);
 
 
 //Days Class functions
-Day.removeItem = function(dayId, itemId, itemKey) {
+Day.removeItem = function(dayId, itemId, key) {
+  const modelSelector = {
+    'restaurants': Restaurant,
+    'hotels': Hotel,
+    'activities': Activity
+  }
+  const model = modelSelector[key];
+  // creating the remove model command via manipulating the key string;
+  const removeModel = `remove${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+
   return Day.findOne({
     where: {
       id: dayId
     },
     include: [{
-      model: itemKey,
+      model: model,
       where: {
         id: itemId
       }
     }]
   })
   .then((day) => {
-    //this variable is created based on the assosciation list that comes back
-    let dayAssociationList = Object.keys(day)[Object.keys(day).length-1]
-    // this variable creates the association specific remove such as
-    //.removeHotel or .removeActivity
-    let removeAssociation = `remove${dayAssociationList.charAt(0).toUpperCase()}${dayAssociationList.slice(1)}`
-    return day[removeAssociation](day[dayAssociationList][0])
+    //Separating out the "included" item
+    const item =  day[key][0];
+    return day[removeModel](item);
+  });
+};
+
+Day.addItem = function(dayId, itemId, key) {
+  const modelSelector = {
+    'restaurants': Restaurant,
+    'hotels': Hotel,
+    'activities': Activity
+  }
+  let model = modelSelector[key];
+
+  //creating the add model command via manipulating the key string(nice Mike!);
+  const addModel = `add${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+  const _item = model.findOne({where: { id: itemId }})
+  const _day = Day.findOne({where: { id: dayId }})
+
+  return Promise.all([ _day, _item ])
+  .then(([ day, item ]) => {
+    return day[addModel](item);
   })
-}
+};
 
 
 //sync and seed
